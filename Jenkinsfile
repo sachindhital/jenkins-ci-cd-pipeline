@@ -58,5 +58,24 @@ pipeline {
             }
         }
     }
+       post {
+        always {
+            echo 'Pipeline completed.'
+        }
+
+        success {
+            mail to: 'developer@example.com',
+                 subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                 body: "Good news! The pipeline completed successfully."
+        }
+
+        failure {
+            mail to: 'developer@example.com',
+                 subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                 body: "Unfortunately, the pipeline failed. Please check the logs."
+        }
+    }
+}
+
 
  
