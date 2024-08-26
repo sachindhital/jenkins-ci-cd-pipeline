@@ -64,13 +64,13 @@ pipeline {
         }
 
         success {
-            mail to: 'developer@example.com',
+            mail to: 'sachin.work75@gmail.com',
                  subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
                  body: "Good news! The pipeline completed successfully."
         }
 
         failure {
-            mail to: 'developer@example.com',
+            mail to: 'sachin.work75@gmail.com',
                  subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
                  body: "Unfortunately, the pipeline failed. Please check the logs."
         }
