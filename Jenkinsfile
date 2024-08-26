@@ -1,33 +1,45 @@
 pipeline {
     agent any
-
+    environment {
+        DIRECTORY_PATH = '/home/sachin/Desktop/Deakin'  // Replace with your code directory path
+        TESTING_ENVIRONMENT = 'test-environment'
+        PRODUCTION_ENVIRONMENT = 'Sachin'
+    }
     stages {
         stage('Build') {
             steps {
-                echo 'Building the code using Maven or a similar tool.'
-                // Example tool: Maven
-                // sh 'mvn clean package'
+                echo "fetch the source code from the directory path specified by the environment variable: ${env.DIRECTORY_PATH}"
+                echo "compile the code and generate any necessary artifacts"
             }
         }
-
-        stage('Unit and Integration Tests') {
+        stage('Test') {
             steps {
-                echo 'Running unit tests with JUnit and integration tests to ensure the components work together.'
-                // Example tool: JUnit
-                // sh 'mvn test'
+                echo 'unit tests'
+                echo 'integration tests'
             }
         }
-
-        stage('Code Analysis') {
+        stage('Code Quality Check') {
             steps {
-                echo 'Performing code analysis using SonarQube or a similar tool.'
-                // Example tool: SonarQube
-                // sh 'sonar-scanner'
+                echo 'check the quality of the code'
             }
         }
-
-        stage('Security Scan') {
+        stage('Deploy') {
             steps {
-                echo 'Performing a security scan using OWASP Dependency-Check or a similar tool.'
-                // Example tool: OWASP Dependency-Check
-                // sh 'dependency-check.sh --scan .
+                echo "deploy the application to a testing environment specified by the environment variable: ${env.TESTING_ENVIRONMENT}"
+            }
+        }
+        stage('Approval') {
+            steps {
+                echo 'Waiting for approval...'
+                sleep time:10, unit:'SECONDS'
+            }
+        }
+        stage('Deploy to Production') {
+            steps {
+                echo "deploy the code to the production environment: ${env.PRODUCTION_ENVIRONMENT}"
+            }
+        }
+    }
+}
+
+
