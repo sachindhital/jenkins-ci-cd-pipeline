@@ -58,11 +58,15 @@ pipeline {
             echo 'Pipeline completed.'
         }
         success {
+                echo "success"
+
             //mail to: "${env.EMAIL_RECIPIENT}",
                //  subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
                //  body: "Good news! The pipeline completed successfully. Check Jenkins for details."
         }
         failure {
+                            echo "success"
+
            // mail to: "${env.EMAIL_RECIPIENT}",
              //    subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
              //    body: "Unfortunately, the pipeline failed. Please check the logs in Jenkins for more details."
