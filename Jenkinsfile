@@ -1,75 +1,72 @@
 pipeline {
     agent any
-
-    environment {
-        DIRECTORY_PATH = '/home/sachin/Desktop/Deakin'  // Replace with your code directory path
-        TESTING_ENVIRONMENT = 'test-environment'
-        PRODUCTION_ENVIRONMENT = 'Sachin'
-        EMAIL_RECIPIENT = 'sachin.work75@gmail.com' // Your email address for notifications
-    }
     
     stages {
         stage('Build') {
             steps {
-                echo 'Building the code using Maven or a similar tool.'
-                echo "fetch the source code from the directory path specified by the environment variable: ${env.DIRECTORY_PATH}"
-                echo "compile the code and generate any necessary artifacts"
+                echo 'Building the code using Gradle'
             }
         }
-
         stage('Unit and Integration Tests') {
             steps {
-                echo 'Running unit tests with JUnit and integration tests to ensure the components work together.'
-                echo 'unit tests'
-                echo 'integration tests'
+                echo 'Unit Tests using TestComplete'
+                echo 'Integration Tests using TestComplete'
+            }
+            post {
+                always {
+                    script {
+                        emailext attachLog: true, subject: "Test Results",
+                            body: "The tests have completed. Please check the logs for details.",
+                            to: "sachin.work75@gmail.com"
+                    }
+                }
+                // failure {
+                    // emailext subject: "Test Failure",
+                        // body: "The tests have failed. Please check the logs for details.",
+                        // to: "sachin.work75@gmail.com",
+                        // attachLog: true
+                // }
             }
         }
-
         stage('Code Analysis') {
             steps {
-                echo 'Performing code analysis using SonarQube or a similar tool.'
-                echo 'check the quality of the code'
+                echo 'Code analysis using FindBugs'
             }
         }
-
-        stage('Deploy to Testing Environment') {
+        stage('Security Scan') {
             steps {
-                echo "deploy the application to a testing environment specified by the environment variable: ${env.TESTING_ENVIRONMENT}"
+                echo 'Code security check using Flawnter'
+            }
+            post {
+                always {
+                    script{
+                        emailext attachLog: true, subject: "Security Scan Results",
+                            body: "The Security Scans have completed. Please check the logs for details.",
+                            to: "sachin.work75@gmail.com"
+                    }
+                }
+                // failure {
+                    // emailext subject: "Security Scan Failure",
+                        // body: "The Security Scans have failed. Please check the logs for details.",
+                        // to: "sachin.work75@gmail.com",
+                        // attachLog: true
+                // }
             }
         }
-
-        stage('Security Scan and Approval') {
+        stage('Deploy to Staging') {
             steps {
-                echo 'Performing a security scan using OWASP Dependency-Check or a similar tool.'
-                echo 'Waiting for approval...'
-                sleep time:10, unit:'SECONDS'
+                echo 'Deploy in dev server in EC2'
             }
         }
-
+        stage('Integration Tests on Staging') {
+            steps {
+                echo 'Integration tests on the staging environment'
+            }
+        }
         stage('Deploy to Production') {
             steps {
-                echo "deploy the code to the production environment: ${env.PRODUCTION_ENVIRONMENT}"
+                echo 'Deploy in production server in EC2'
             }
-        }
-    }
-
-    post {
-        always {
-            echo 'Pipeline completed.'
-        }
-        success {
-                echo "success"
-
-            //mail to: "${env.EMAIL_RECIPIENT}",
-               //  subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-               //  body: "Good news! The pipeline completed successfully. Check Jenkins for details."
-        }
-        failure {
-                            echo "success"
-
-           // mail to: "${env.EMAIL_RECIPIENT}",
-             //    subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-             //    body: "Unfortunately, the pipeline failed. Please check the logs in Jenkins for more details."
         }
     }
 }
